@@ -37,70 +37,95 @@ void Game::Play()
             if (event.type == sf::Event::Closed) {
                 mWindow.close();
             }
-            if (event.type == sf::Event::KeyPressed) {
-                mDice1.Roll();
-                std::cout << mDice1.GetFace() << std::endl;
-                mDice2.Roll();
+
+            else if (event.type == sf::Event::KeyPressed) {
+                Roll();
             }
+                
         }
 
+        //Clear
         mDrawqueue.clear();
         mWindow.clear();
 
         //Update
-        //Update();
+        Update();
 
-        DrawUI();
         //Draw
-        /*for (size_t i = 0; i < mDrawqueue.size(); i++) {
-            mWindow.draw(mDrawqueue.at(i));
-        }*/
-       /* std::vector<sf::Sprite>::iterator it;
-        for (it = mDrawqueue.begin(); it != mDrawqueue.end(); ++it) {
-            mWindow.draw(*it);
-        }*/
-       /* for (auto spr : mDrawqueue) {
-            mWindow.draw(spr);
-        }*/
-
-        mWindow.display();
-        
-       
+        DrawUI();
+        mWindow.display(); 
     }
 }
+
+void Game::Roll()
+{
+    mDice1.Roll();
+    mDice2.Roll();
+    mRolls++;
+
+    mSum = (mDice1.GetFace() + mDice2.GetFace());
+    if (mPoint <= 0) {
+        if ((mSum == 7) || (mSum == 12)) {
+            mLosses++;
+            mPoint = 0;
+        }
+
+        else {
+            mPoint = mSum;
+        }
+    }
+
+    else {
+        if ((mSum == 2) || (mSum == 3) || (mSum == 12)) {
+            mLosses++;
+            mPoint = 0;
+        }
+        else if (mSum == mPoint) {
+            mWins++;
+            mPoint = 0;
+        }
+    }
+}
+
 
 void Game::Update()
 {
     switch (mState){
     case(State::START_SCREEN):
         //Display start screen
-        std::cout << "Start Screen state entered" << std::endl;
+        //std::cout << "Start Screen state entered" << std::endl;
+        
+        //Await First Roll before switching state
+        if (mRolls > 0) {
+            SetState(State::PLAYER_ROLL_1);
+        }
+        
         break;
 
     case(State::WIN_SCREEN):
         //Display win screen
-        std::cout << "Win Screen state entered" << std::endl;
+        //std::cout << "Win Screen state entered" << std::endl;
         break;
 
     case(State::LOSE_SCREEN):
         //Display lose screen
-        std::cout << "Lose Screen state entered" << std::endl;
+        //std::cout << "Lose Screen state entered" << std::endl;
         break;
 
-    case(State::PLAYER_TURN):
+    case(State::PLAYER_ROLL_1):
         //Process player's dice roll
-        std::cout << "Player Turn state entered" << std::endl;
-
+        //std::cout << "Player Turn state entered" << std::endl;
+        
         break;
 
-    case(State::CPU_TURN):
+    case(State::PLAYER_ROLL_2):
         //Process computer's dice roll
-        std::cout << "CPU Turn state entered" << std::endl;
+        //std::cout << "CPU Turn state entered" << std::endl;
         break;
 
     case(State::SCORE_CALC):
         //Display scores
-        std::cout << "Score Calculation state entered" << std::endl;
+        //std::cout << "Score Calculation state entered" << std::endl;
         break;
     }
 }
@@ -179,19 +204,23 @@ void Game::DrawUI()
     }
 
     //Buttons
-    AddText("Roll!", sf::Vector2f(250, 382), 40);
-    AddText("Reset", sf::Vector2f(495, 450), 40);
-    AddText("Exit", sf::Vector2f(630, 450), 40);
+    AddText("Roll!", sf::Vector2f(325, 390), 40);
+    AddText("Reset", sf::Vector2f(515, 450), 24);
+    AddText("Exit", sf::Vector2f(650, 450), 24);
 
     //Dice Display
     std::string lDice1 = std::to_string(mDice1.GetFace());
-    AddText(lDice1, sf::Vector2f(200, 135), 40);
-    AddText("/", sf::Vector2f(230, 135), 40);
+    AddText(lDice1, sf::Vector2f(210, 135), 40);
+    AddText("/", sf::Vector2f(240, 135), 40);
     std::string lDice2 = std::to_string(mDice2.GetFace());
-    AddText(lDice2, sf::Vector2f(260, 135), 40);
+    AddText(lDice2, sf::Vector2f(270, 135), 40);
+
+    //Dice Sum Display
+    std::string lSum = std::to_string(mSum);
+    AddText(lSum, sf::Vector2f(495, 305), 40);
 
     //Rules
-    AddText("Craps Rules: Aim for your Point - the number(s) on the right.\nRoll until you hit the Point to win!\nIf you roll a 2, 3 or a 12, you lose.", sf::Vector2f(200, 8), 14);
+    AddText("Craps Rules: Aim for your Point - the number(s) on the \nright.\nRoll until you hit the Point to win!\nIf you roll a 2, 3 or a 12, you lose.", sf::Vector2f(210, 10), 14);
 }
 
 #pragma endregion
@@ -200,7 +229,8 @@ void Game::DrawUI()
 
 void RNG::Seed()
 {
-    srand(static_cast<unsigned>(time(0)));
+    std::cout << "Seeded to " << time(0) << std::endl;
+    srand(time(0));
 }
 
 int RNG::GetRand(int max) const
@@ -211,9 +241,14 @@ int RNG::GetRand(int max) const
 
 #pragma region Dice
 
+
+Dice::Dice()
+{
+    rng.Seed();
+}
+
 void Dice::Roll()
 {
-    RNG rng;
     mFace = rng.GetRand(mSides);
 }
 

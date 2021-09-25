@@ -18,10 +18,12 @@ public:
 
 class Dice {
 public:
+    Dice();
     void Roll();
     int GetFace() const;
 
 private:
+    RNG rng;
     int mFace = 0;  //The dice's current face value [1 - faces]
     int mSides = 6; //How many faces the dice has. by default is a standard 6-sided die.
 };
@@ -29,8 +31,8 @@ private:
 
 enum class State {
     START_SCREEN = 0,
-    PLAYER_TURN,
-    CPU_TURN,
+    PLAYER_ROLL_1,
+    PLAYER_ROLL_2,
     SCORE_CALC,
     WIN_SCREEN,
     LOSE_SCREEN
@@ -44,6 +46,7 @@ public:
     ~Game() = default;
 
     void Play();
+    void Roll();
     void Update();
 
     void SetState(State s);
@@ -70,5 +73,7 @@ private:
     int mWins;
     int mLosses;
 
+    int mSum;
     int mPoint = 0;
+    int mRolls;
 };
