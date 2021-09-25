@@ -27,12 +27,16 @@ void Game::Play()
             if (event.type == sf::Event::Closed) {
                 mWindow.close();
             }
+            if (event.type == sf::Event::KeyPressed) {
+                mDice1.Roll();
+                std::cout << mDice1.GetFace() << std::endl;
+            }
         }
 
         mWindow.clear();
 
         //Update
-        Update();
+        //Update();
 
         //Draw
         for (size_t i = 0; i < mDrawqueue.size(); i++) {
@@ -83,3 +87,25 @@ void Game::SetState(State s)
 }
 
 
+void RNG::Seed()
+{
+    srand(static_cast<unsigned>(time(0)));
+}
+
+int RNG::GetRand(int max) const
+{
+    return(rand() % max) + 1;
+}
+
+
+
+void Dice::Roll()
+{
+    RNG rng;
+    mFace = rng.GetRand(mSides);
+}
+
+int Dice::GetFace() const
+{
+    return mFace;
+}

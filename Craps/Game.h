@@ -6,6 +6,27 @@
 #include <SFML/Window.hpp>
 #include<SFML/Graphics.hpp>
 
+//A Simple Random Number Generator class. Seeded by Time. 
+class RNG {
+public:
+    //Seed our RNG to the system's current time.
+    void Seed();
+
+    //Returns a random number in range [1..max]
+    int GetRand(int max) const;
+};
+
+class Dice {
+public:
+    void Roll();
+    int GetFace() const;
+
+private:
+    int mFace = 0;  //The dice's current face value [1 - faces]
+    int mSides = 6; //How many faces the dice has. by default is a standard 6-sided die.
+};
+
+
 enum class State {
     START_SCREEN = 0,
     PLAYER_TURN,
@@ -29,6 +50,9 @@ public:
 
 private:
     State mState;
+    Dice mDice1;
+    Dice mDice2;
+    
 
     int mClientWidth = 600;
     int mClientHeight = 400;
