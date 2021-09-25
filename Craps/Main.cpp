@@ -3,7 +3,6 @@
 int main() {
     Game game;
 
-
     //Prevent the program from terminating immediately
     std::cin.get();
 }
@@ -33,11 +32,54 @@ void Game::Play()
         mWindow.clear();
 
         //Update
-
+        Update();
 
         //Draw
-        for (int i = 0; i < mDrawqueue.size(); i++) {
+        for (size_t i = 0; i < mDrawqueue.size(); i++) {
             mWindow.draw(mDrawqueue.at(i));
         }
     }
 }
+
+void Game::Update()
+{
+    switch (mState){
+    case(State::START_SCREEN):
+        //Display start screen
+        std::cout << "Start Screen state entered" << std::endl;
+        break;
+
+    case(State::WIN_SCREEN):
+        //Display win screen
+        std::cout << "Win Screen state entered" << std::endl;
+        break;
+
+    case(State::LOSE_SCREEN):
+        //Display lose screen
+        std::cout << "Lose Screen state entered" << std::endl;
+        break;
+
+    case(State::PLAYER_TURN):
+        //Process player's dice roll
+        std::cout << "Player Turn state entered" << std::endl;
+        break;
+
+    case(State::CPU_TURN):
+        //Process computer's dice roll
+        std::cout << "CPU Turn state entered" << std::endl;
+        break;
+
+    case(State::SCORE_CALC):
+        //Display scores
+        std::cout << "Score Calculation state entered" << std::endl;
+        break;
+    }
+}
+
+void Game::SetState(State s)
+{
+    mState = s;
+    return;
+}
+
+
