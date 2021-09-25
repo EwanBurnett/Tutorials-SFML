@@ -47,6 +47,9 @@ public:
     void Update();
 
     void SetState(State s);
+    //Adds a sprite to the draw queue. 
+    void AddSprite(std::string path, sf::Vector2f pos);
+    void DrawUI();
 
 private:
     State mState;
@@ -54,13 +57,13 @@ private:
     Dice mDice2;
     
 
-    int mClientWidth = 600;
-    int mClientHeight = 400;
+    int mClientWidth = 750;
+    int mClientHeight = 500;
 
     sf::RenderWindow mWindow;
     sf::VideoMode mVideoMode;
 
-    std::vector<sf::Drawable>mDrawqueue;
+    std::vector<sf::Sprite>mDrawqueue;
 
 private:
     int mScore_p1;

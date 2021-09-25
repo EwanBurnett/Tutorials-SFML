@@ -7,6 +7,8 @@ int main() {
     std::cin.get();
 }
 
+#pragma region Game
+
 Game::Game() {
     mVideoMode.width = mClientWidth;
     mVideoMode.height = mClientHeight;
@@ -15,11 +17,19 @@ Game::Game() {
     mWindow.setFramerateLimit(60);
     mWindow.setVerticalSyncEnabled(false);
 
+    DrawUI();
+
     Play();
 }
 
 void Game::Play()
 {
+    sf::Texture TEST;
+    TEST.loadFromFile("Resources/UI/UI_Background.png");
+    sf::Sprite s;
+    s.setTexture(TEST);
+    s.setPosition(sf::Vector2f(0, 0));
+
     while (mWindow.isOpen()) {
         //Event Polling
         sf::Event event;
@@ -33,15 +43,28 @@ void Game::Play()
             }
         }
 
+        mDrawqueue.clear();
         mWindow.clear();
 
         //Update
         //Update();
 
+        DrawUI();
         //Draw
-        for (size_t i = 0; i < mDrawqueue.size(); i++) {
+        /*for (size_t i = 0; i < mDrawqueue.size(); i++) {
             mWindow.draw(mDrawqueue.at(i));
+        }*/
+       /* std::vector<sf::Sprite>::iterator it;
+        for (it = mDrawqueue.begin(); it != mDrawqueue.end(); ++it) {
+            mWindow.draw(*it);
+        }*/
+        for (auto& spr : mDrawqueue) {
+            mWindow.draw(spr);
         }
+
+        mWindow.display();
+        
+       
     }
 }
 
@@ -66,6 +89,7 @@ void Game::Update()
     case(State::PLAYER_TURN):
         //Process player's dice roll
         std::cout << "Player Turn state entered" << std::endl;
+
         break;
 
     case(State::CPU_TURN):
@@ -86,6 +110,37 @@ void Game::SetState(State s)
     return;
 }
 
+void Game::AddSprite(std::string path, sf::Vector2f pos)
+{
+    sf::Texture texCache;
+    texCache.loadFromFile(path);
+    sf::Sprite sprCache;
+    sprCache.setTexture(texCache);
+    sprCache.setPosition(pos);
+    mDrawqueue.push_back(sprCache);
+}
+
+void Game::DrawUI()
+{
+    //Load Background
+    AddSprite("Resources/UI/UI_Background.png", sf::Vector2f(0, 0));
+
+    //Load UI Elements
+    AddSprite("Resources/UI/UI_LogWindow.png", sf::Vector2f(8, 8));
+    AddSprite("Resources/UI/UI_RulesWindow.png", sf::Vector2f(200, 8));
+    AddSprite("Resources/UI/UI_Win-Loss.png", sf::Vector2f(570, 8));
+    AddSprite("Resources/UI/UI_PointDisplay.png", sf::Vector2f(570, 93));
+    AddSprite("Resources/UI/UI_PlayerView.png", sf::Vector2f(570, 157));
+    AddSprite("Resources/UI/UI_DiceView.png", sf::Vector2f(200, 135));
+    AddSprite("Resources/UI/UI_RollButton.png", sf::Vector2f(250, 382));
+    AddSprite("Resources/UI/UI_ResetButton.png", sf::Vector2f(495, 450));
+    AddSprite("Resources/UI/UI_ExitButton.png", sf::Vector2f(630, 450));
+    
+}
+
+#pragma endregion
+
+#pragma region RNG
 
 void RNG::Seed()
 {
@@ -96,8 +151,9 @@ int RNG::GetRand(int max) const
 {
     return(rand() % max) + 1;
 }
+#pragma endregion
 
-
+#pragma region Dice
 
 void Dice::Roll()
 {
@@ -109,3 +165,5 @@ int Dice::GetFace() const
 {
     return mFace;
 }
+
+#pragma endregion
