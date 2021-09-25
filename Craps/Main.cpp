@@ -254,7 +254,7 @@ void Game::DrawUI()
 void RNG::Seed()
 {
     //std::cout << "Seeded to " << time(0) << std::endl;
-    srand(time(0));
+    srand((unsigned int)time(0));
 }
 
 int RNG::GetRand(int max) const
