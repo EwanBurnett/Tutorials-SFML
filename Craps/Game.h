@@ -49,6 +49,9 @@ public:
     void Roll();
     void Update();
 
+    void Win();
+    void Lose();
+
     void SetState(State s);
     //Adds a sprite to the draw queue. 
     void AddSprite(std::string path, sf::Vector2f pos);

@@ -16,7 +16,7 @@ Game::Game() {
     mWindow.create(mVideoMode, "SFML Craps");
     mWindow.setFramerateLimit(60);
     mWindow.setVerticalSyncEnabled(false);
-
+    
     DrawUI();
 
     Play();
@@ -64,27 +64,35 @@ void Game::Roll()
     mRolls++;
 
     mSum = (mDice1.GetFace() + mDice2.GetFace());
+
+    //First Turn
     if (mPoint <= 0) {
+        std::cout << "Start: Aiming for either a 7 or 12" << std::endl;
         if ((mSum == 7) || (mSum == 12)) {
-            mLosses++;
-            mPoint = 0;
+            Win();
         }
 
+        else if ((mSum == 2) || (mSum == 3) || (mSum == 12) ){
+            Lose();
+        } 
+
         else {
+            std::cout << "Player aiming for: " << mSum << std::endl;
             mPoint = mSum;
         }
     }
 
+    //Rerolls
     else {
         if ((mSum == 2) || (mSum == 3) || (mSum == 12)) {
-            mLosses++;
-            mPoint = 0;
+            Lose();
         }
         else if (mSum == mPoint) {
-            mWins++;
-            mPoint = 0;
+            Win();
         }
     }
+
+    std::cout << "Turn " << mRolls << " - Player rolled a " << mDice1.GetFace() << " / " << mDice2.GetFace() << ": Sum = " << mSum << std::endl;
 }
 
 
@@ -128,6 +136,22 @@ void Game::Update()
         //std::cout << "Score Calculation state entered" << std::endl;
         break;
     }
+}
+
+void Game::Win()
+{
+    std::cout << "Win" << std::endl;
+    mWins++;
+    mPoint = 0;
+    SetState(State::WIN_SCREEN);
+}
+
+void Game::Lose()
+{
+    std::cout << "Loss" << std::endl;
+    mLosses++;
+    mPoint = 0;
+    SetState(State::LOSE_SCREEN);
 }
 
 void Game::SetState(State s)
@@ -185,22 +209,22 @@ void Game::DrawUI()
     //Win/Loss Display
     std::string lWins = std::to_string(mWins);
     std::string lLosses = std::to_string(mLosses);
-    AddText("Wins", sf::Vector2f(590, 12), 24);
+    AddText("Wins", sf::Vector2f(585, 12), 24);
     AddText(lWins, sf::Vector2f(600, 30), 40);
-    AddText(" - ", sf::Vector2f(650, 30), 40);
+    AddText(" - ", sf::Vector2f(638, 30), 40);
     AddText("Losses", sf::Vector2f(660, 12), 24);
-    AddText(lLosses, sf::Vector2f(700, 30), 40);
+    AddText(lLosses, sf::Vector2f(680, 30), 40);
 
     //Point Display
     if (mPoint == 0) {
         //First Turn, so display 7 or 12
-        AddText("7 or 12", sf::Vector2f(590, 93), 40);
+        AddText("7 or 12", sf::Vector2f(594, 93), 40);
     }
     else {
         //Rerolling, so set equal to the player's point
-        AddText("> ", sf::Vector2f(570, 103), 40);
+        AddText("Aim For: ", sf::Vector2f(582, 103), 30);
         std::string lPoint = std::to_string(mPoint);
-        AddText(lPoint, sf::Vector2f(600, 103), 40);
+        AddText(lPoint, sf::Vector2f(700, 100), 34);
     }
 
     //Buttons
@@ -217,7 +241,7 @@ void Game::DrawUI()
 
     //Dice Sum Display
     std::string lSum = std::to_string(mSum);
-    AddText(lSum, sf::Vector2f(495, 305), 40);
+    AddText(lSum, sf::Vector2f(492, 309), 40);
 
     //Rules
     AddText("Craps Rules: Aim for your Point - the number(s) on the \nright.\nRoll until you hit the Point to win!\nIf you roll a 2, 3 or a 12, you lose.", sf::Vector2f(210, 10), 14);
@@ -229,7 +253,7 @@ void Game::DrawUI()
 
 void RNG::Seed()
 {
-    std::cout << "Seeded to " << time(0) << std::endl;
+    //std::cout << "Seeded to " << time(0) << std::endl;
     srand(time(0));
 }
 
