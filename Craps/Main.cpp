@@ -4,7 +4,7 @@ int main() {
     Game game;
 
     //Prevent the program from terminating immediately
-    std::cin.get();
+    //std::cin.get();
 }
 
 #pragma region Game
@@ -40,6 +40,7 @@ void Game::Play()
             if (event.type == sf::Event::KeyPressed) {
                 mDice1.Roll();
                 std::cout << mDice1.GetFace() << std::endl;
+                mDice2.Roll();
             }
         }
 
@@ -58,9 +59,9 @@ void Game::Play()
         for (it = mDrawqueue.begin(); it != mDrawqueue.end(); ++it) {
             mWindow.draw(*it);
         }*/
-        for (auto& spr : mDrawqueue) {
+       /* for (auto spr : mDrawqueue) {
             mWindow.draw(spr);
-        }
+        }*/
 
         mWindow.display();
         
@@ -118,6 +119,24 @@ void Game::AddSprite(std::string path, sf::Vector2f pos)
     sprCache.setTexture(texCache);
     sprCache.setPosition(pos);
     mDrawqueue.push_back(sprCache);
+    mWindow.draw(sprCache); //<-- Debug: Fix Stale References in Draw Queue Vector
+}
+
+void Game::AddText(std::string Text, sf::Vector2f pos, int size)
+{
+    sf::Font Lato;
+    if (!Lato.loadFromFile("Resources/Fonts/Lato/Lato-Regular.ttf")){
+        return;
+    }
+
+    sf::Text text;
+    text.setFont(Lato);
+    text.setCharacterSize(size);
+    text.setStyle(sf::Text::Regular);
+
+    text.setString(Text);
+    text.setPosition(pos);
+    mWindow.draw(text);
 }
 
 void Game::DrawUI()
@@ -136,6 +155,43 @@ void Game::DrawUI()
     AddSprite("Resources/UI/UI_ResetButton.png", sf::Vector2f(495, 450));
     AddSprite("Resources/UI/UI_ExitButton.png", sf::Vector2f(630, 450));
     
+    //Load Text Elements
+
+    //Win/Loss Display
+    std::string lWins = std::to_string(mWins);
+    std::string lLosses = std::to_string(mLosses);
+    AddText("Wins", sf::Vector2f(590, 12), 24);
+    AddText(lWins, sf::Vector2f(600, 30), 40);
+    AddText(" - ", sf::Vector2f(650, 30), 40);
+    AddText("Losses", sf::Vector2f(660, 12), 24);
+    AddText(lLosses, sf::Vector2f(700, 30), 40);
+
+    //Point Display
+    if (mPoint == 0) {
+        //First Turn, so display 7 or 12
+        AddText("7 or 12", sf::Vector2f(590, 93), 40);
+    }
+    else {
+        //Rerolling, so set equal to the player's point
+        AddText("> ", sf::Vector2f(570, 103), 40);
+        std::string lPoint = std::to_string(mPoint);
+        AddText(lPoint, sf::Vector2f(600, 103), 40);
+    }
+
+    //Buttons
+    AddText("Roll!", sf::Vector2f(250, 382), 40);
+    AddText("Reset", sf::Vector2f(495, 450), 40);
+    AddText("Exit", sf::Vector2f(630, 450), 40);
+
+    //Dice Display
+    std::string lDice1 = std::to_string(mDice1.GetFace());
+    AddText(lDice1, sf::Vector2f(200, 135), 40);
+    AddText("/", sf::Vector2f(230, 135), 40);
+    std::string lDice2 = std::to_string(mDice2.GetFace());
+    AddText(lDice2, sf::Vector2f(260, 135), 40);
+
+    //Rules
+    AddText("Craps Rules: Aim for your Point - the number(s) on the right.\nRoll until you hit the Point to win!\nIf you roll a 2, 3 or a 12, you lose.", sf::Vector2f(200, 8), 14);
 }
 
 #pragma endregion

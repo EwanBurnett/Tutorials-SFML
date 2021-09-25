@@ -49,6 +49,7 @@ public:
     void SetState(State s);
     //Adds a sprite to the draw queue. 
     void AddSprite(std::string path, sf::Vector2f pos);
+    void AddText(std::string Text, sf::Vector2f pos, int size);
     void DrawUI();
 
 private:
@@ -66,6 +67,8 @@ private:
     std::vector<sf::Sprite>mDrawqueue;
 
 private:
-    int mScore_p1;
-    int mScore_p2;
+    int mWins;
+    int mLosses;
+
+    int mPoint = 0;
 };
