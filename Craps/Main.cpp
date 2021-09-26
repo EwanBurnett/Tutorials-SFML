@@ -17,20 +17,22 @@ Game::Game() {
     mWindow.setFramerateLimit(60);
     mWindow.setVerticalSyncEnabled(false);
     
-    DrawUI();
+    //DrawUI();
 
     Play();
 }
 
 void Game::Play()
 {
-    sf::Texture TEST;
-    TEST.loadFromFile("Resources/UI/UI_Background.png");
-    sf::Sprite s;
-    s.setTexture(TEST);
-    s.setPosition(sf::Vector2f(0, 0));
+    sf::Time deltaTime;
+    sf::Clock clock;
 
     while (mWindow.isOpen()) {
+        //Calculate Timing
+        sf::Time elapsedTime = clock.restart();
+        deltaTime = elapsedTime;
+        float dtAsMs = deltaTime.asSeconds();
+
         //Event Polling
         sf::Event event;
         while (mWindow.pollEvent(event)) {
@@ -49,10 +51,9 @@ void Game::Play()
         mWindow.clear();
 
         //Update
-        Update();
+        Update(dtAsMs);
 
         //Draw
-        DrawUI();
         mWindow.display(); 
     }
 }
@@ -96,8 +97,10 @@ void Game::Roll()
 }
 
 
-void Game::Update()
+void Game::Update(float dt)
 {
+    DrawUI(dt);
+
     switch (mState){
     case(State::START_SCREEN):
         //Display start screen
@@ -112,7 +115,16 @@ void Game::Update()
 
     case(State::WIN_SCREEN):
         //Display win screen
-        //std::cout << "Win Screen state entered" << std::endl;
+        static float animTime;
+        animTime += dt;
+        if (animTime <= 1.5f) {  //After 1.5s, stop display
+            AddSprite("Resources/UI/UI_WinBanner.png", sf::Vector2f(0, 170));
+            AddText("You Win!", sf::Vector2f(220, 210), 72);
+        }
+        else {
+            animTime = 0;
+            SetState(State::PLAYER_ROLL_1);
+        }
         break;
 
     case(State::LOSE_SCREEN):
@@ -188,7 +200,7 @@ void Game::AddText(std::string Text, sf::Vector2f pos, int size)
     mWindow.draw(text);
 }
 
-void Game::DrawUI()
+void Game::DrawUI(float dt)
 {
     //Load Background
     AddSprite("Resources/UI/UI_Background.png", sf::Vector2f(0, 0));

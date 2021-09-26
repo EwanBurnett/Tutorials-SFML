@@ -47,7 +47,7 @@ public:
 
     void Play();
     void Roll();
-    void Update();
+    void Update(float dt);
 
     void Win();
     void Lose();
@@ -56,7 +56,7 @@ public:
     //Adds a sprite to the draw queue. 
     void AddSprite(std::string path, sf::Vector2f pos);
     void AddText(std::string Text, sf::Vector2f pos, int size);
-    void DrawUI();
+    void DrawUI(float dt);
 
 private:
     State mState;
