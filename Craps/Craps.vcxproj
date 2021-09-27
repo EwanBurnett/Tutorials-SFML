@@ -93,16 +93,17 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\SFML-2.5.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;sfml-audio-s-d.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;sfml-network-s-d.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\SFML-2.5.1\lib;$(ProjectDir)..\..\..\SFML-2.5.1\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\SFML-2.5.1\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /s /y /q "$(ProjectDir)\Resources" "$(TargetDir)\Resources\"</Command>
+      <Command>xcopy /s /y /q "$(ProjectDir)Resources" "$(TargetDir)\Resources\"
+xcopy /s /y /q "$(ProjectDir)..\SFML-2.5.1\bin\Openal32.dll" "$(TargetDir)\Resources\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -113,7 +114,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\SFML-2.5.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +122,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>sfml-graphics-s.lib;sfml-window-s.lib;sfml-system-s.lib;opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;sfml-audio-s.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;sfml-network-s.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\..\SFML-2.5.1\lib;$(ProjectDir)..\..\..\SFML-2.5.1\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\SFML-2.5.1\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /s /y /q "$(ProjectDir)\Resources" "$(TargetDir)\Resources\"</Command>
