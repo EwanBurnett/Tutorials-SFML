@@ -39,6 +39,9 @@
     <ClCompile Include="States\State_MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="States\State_Battle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Sprites\Background.png">
@@ -79,6 +82,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="States\State_MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="States\State_Battle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -25,21 +25,15 @@ StateStack::~StateStack()
 }
 
 
+void StateStack::InitState(std::string stateName, State* state)
+{
+	m_States.try_emplace(stateName, state);
+}
+
 void StateStack::InitStates(std::unordered_map<std::string, State*> l_States)
 {
 	if(l_States.size() > 0)
 	{
-		/*
-		//Add all game states
-		for (unsigned int i = 0; i < l_States.size(); i++) {
-			assert(std::find(l_States.begin(), l_States.end(), i) != l_States.end());
-			std::vector<std::string, State*> cache = l_States[i];
-			assert(cache); //Ensures the state is valid before adding
-			m_States.emplace(cache);
-		}
-
-		*/
-
 		for (auto& j : l_States) {
 			m_States.try_emplace(j.first, j.second);
 		}
@@ -98,6 +92,7 @@ void StateStack::Push(State* state)
 void StateStack::Push(std::string stateName)
 {
 	assert(stateName != "");
+	assert(m_States.find(stateName) != m_States.end());
 	State* cache = m_States.at(stateName);
 	Push(cache);
 }

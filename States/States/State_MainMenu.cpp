@@ -34,7 +34,7 @@ void State_MainMenu::EventHandler(sf::Event& event)
 	switch (event.type) {
 	case(sf::Event::EventType::KeyPressed):
 		if (event.key.code == sf::Keyboard::Space) {
-			Game::TryPush("FF1");
+			Game::TryPush("Battle");
 		}
 	}
 }

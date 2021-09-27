@@ -13,6 +13,7 @@ public:
 	StateStack();
 	~StateStack();
 
+	static void InitState(std::string stateName, State* state);
 	static void InitStates(std::unordered_map<std::string, State*> l_States);
 	static void Update(sf::Time deltaTime);
 	static void Render(sf::RenderWindow& window);

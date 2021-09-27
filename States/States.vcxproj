@@ -171,6 +171,7 @@ xcopy /s /y /q "$(ProjectDir)..\SFML-2.5.1\bin\Openal32.dll" "$(TargetDir)"</Com
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="StateStack.cpp" />
     <ClCompile Include="States\State.cpp" />
+    <ClCompile Include="States\State_Battle.cpp" />
     <ClCompile Include="States\State_Empty.cpp" />
     <ClCompile Include="States\State_FF1.cpp" />
     <ClCompile Include="States\State_MainMenu.cpp" />
@@ -192,6 +193,7 @@ xcopy /s /y /q "$(ProjectDir)..\SFML-2.5.1\bin\Openal32.dll" "$(TargetDir)"</Com
     <ClInclude Include="States\State_Empty.h" />
     <ClInclude Include="States\State_FF1.h" />
     <ClInclude Include="States\State_MainMenu.h" />
+    <ClInclude Include="States\State_Battle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

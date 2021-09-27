@@ -27,20 +27,26 @@ void Game::Play()
 	State_FF1* ff1 = new State_FF1(); {};
 	State_MainMenu* mainMenu = new State_MainMenu(); {};
 
-	std::unordered_map<std::string, State*> StateInit;
+	//Using InitStates
+	/*std::unordered_map<std::string, State*> StateInit;
 	StateInit.try_emplace("FF1", ff1);
 	StateInit.try_emplace("MainMenu", mainMenu);
 
 	StateStack::InitStates(StateInit);
-	StateStack::Push(mainMenu);
+	StateStack::Push(mainMenu);*/
 
+	//using InitState
+	StateStack::InitState("Battle", ff1);
+	StateStack::InitState("Main Menu", mainMenu);
+	
+	StateStack::Push("Main Menu");
 	//Timing
 	sf::Time deltaTime;
 	sf::Clock clock;
 
 	//Window Declaration
 	sf::VideoMode videoMode(480, 320, 16U);
-	m_Window.create(videoMode, "Game Window Title");
+	m_Window.create(videoMode, "SFML States");
 
 	m_Window.setFramerateLimit(60);
 
